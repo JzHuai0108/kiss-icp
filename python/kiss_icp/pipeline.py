@@ -128,7 +128,7 @@ class OdometryPipeline:
                     tum_data.append([float(timestamps[idx]), tx, ty, tz, qx, qy, qz, qw])
             return np.array(tum_data).astype(np.float64)
 
-        np.savetxt(fname=f"{filename}_tum.txt", X=_to_tum_format(poses, timestamps), fmt="%.4f")
+        np.savetxt(fname=f"{filename}_tum.txt", X=_to_tum_format(poses, timestamps), fmt="%.9f")
 
     def _calibrate_poses(self, poses):
         return (

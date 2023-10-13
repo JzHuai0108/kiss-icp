@@ -2,18 +2,21 @@
 <launch>
   <!-- ROS paramaters -->
   <arg name="bagfile" default=""/>
+  <arg name="starttime" default="0"/>
   <arg name="visualize" default="true"/>
   <arg name="odom_frame" default="odom"/>
   <arg name="child_frame" default="base_link"/>
   <arg name="topic" default=""/>
   <arg name="publish_odom_tf" default="true"/>
   <arg name="publish_alias_tf" default="true"/>
+  <arg name="dosave" default="true"/>
+  <arg name="path_est" default="./results/scan_states.txt" />
 
   <!-- KISS-ICP paramaters -->
-  <arg name="deskew" default="false"/>
+  <arg name="deskew" default="true"/>
   <arg name="max_range" default="100.0" />
-  <arg name="min_range" default="5.0" />
-  <arg name="voxel_size" default="" />
+  <arg name="min_range" default="3.0" />
+  <arg name="voxel_size" default="1" />
 
   <!-- Odometry node -->
   <node pkg="kiss_icp" type="odometry_node" name="odometry_node" output="screen">
@@ -35,7 +38,7 @@
 
   <!-- Rosbag player, if bagfile argument was specified -->
   <group if="$(eval bagfile != '')">
-    <node pkg="rosbag" type="play" name="player" args="$(arg bagfile)" output="screen"/>
+    <node pkg="rosbag" type="play" name="player" args="$(arg bagfile) -s $(arg starttime)" output="screen"/>
   </group>
 
   <!-- Visualizer -->
@@ -43,4 +46,11 @@
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find kiss_icp)/rviz/kiss_icp_ros1.rviz"/>
   </group>
 
+  <group if="$(arg dosave)">
+      <node name="recorder_estimate" pkg="kiss_icp" type="pose_to_file" output="screen" required="true">
+          <param name="topic"      type="str" value="/odometry_node/odometry" />
+          <param name="topic_type" type="str" value="Odometry" />
+          <param name="output"     type="str" value="$(arg path_est)" />
+      </node>
+  </group>
 </launch>
