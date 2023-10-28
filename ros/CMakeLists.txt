@@ -21,7 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 cmake_minimum_required(VERSION 3.16...3.26)
-project(kiss_icp VERSION 0.2.10 LANGUAGES CXX)
+project(kiss_icp VERSION 0.3.0 LANGUAGES CXX)
 
 set(ignore ${CATKIN_INSTALL_INTO_PREFIX_ROOT})
 set(CMAKE_BUILD_TYPE Release)
@@ -47,6 +47,7 @@ if("$ENV{ROS_VERSION}" STREQUAL "1")
     COMPONENTS geometry_msgs
                nav_msgs
                sensor_msgs
+               geometry_msgs
                roscpp
                rosbag
                std_msgs
@@ -91,6 +92,7 @@ elseif("$ENV{ROS_VERSION}" STREQUAL "2")
     rclcpp_components
     nav_msgs
     sensor_msgs
+    geometry_msgs
     tf2_ros)
 
   rclcpp_components_register_node(odometry_component PLUGIN "kiss_icp_ros::OdometryServer" EXECUTABLE odometry_node)
