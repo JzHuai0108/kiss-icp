@@ -53,6 +53,15 @@ kiss_icp_pipeline --help
 
 For advanced instructions on the Python pacakge plase see [this README](python/README.md)
 
+I recommend using a conda virtual env based on miniconda, say kissicp.
+```
+conda activate kissicp
+cd src/kiss-icp
+make editable
+kiss_icp_pipeline --help
+
+```
+
 ## ROS support
 
 <details>
@@ -67,7 +76,7 @@ git clone https://github.com/PRBonn/kiss-icp && colcon build
 <summary>ROS 1</summary>
 
 ```sh
-cd ~/catkin_ws/ && git clone https://github.com/PRBonn/kiss-icp && catkin build
+cd ~/catkin_ws/ && git clone https://github.com/PRBonn/kiss-icp && catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3
 ```
 </details>
 

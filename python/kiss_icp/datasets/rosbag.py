@@ -77,8 +77,10 @@ class RosbagDataset:
 
     def __getitem__(self, idx):
         connection, timestamp, rawdata = next(self.msgs)
-        self.timestamps.append(self.to_sec(timestamp))
+        # self.timestamps.append(self.to_sec(timestamp))
         msg = self.bag.deserialize(rawdata, connection.msgtype)
+        msgtime = msg.header.stamp.sec + msg.header.stamp.nanosec * 1e-9
+        self.timestamps.append(msgtime)
         return self.read_point_cloud(msg)
 
     @staticmethod
