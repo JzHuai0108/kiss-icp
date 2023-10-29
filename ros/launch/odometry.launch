@@ -11,6 +11,7 @@
   <arg name="publish_alias_tf" default="true"/>
   <arg name="dosave" default="true"/>
   <arg name="path_est" default="./results/scan_states.txt" />
+  <arg name="closeatend" default="false"/>
 
   <!-- KISS-ICP paramaters -->
   <arg name="deskew" default="true"/>
@@ -38,7 +39,7 @@
 
   <!-- Rosbag player, if bagfile argument was specified -->
   <group if="$(eval bagfile != '')">
-    <node pkg="rosbag" type="play" name="player" args="$(arg bagfile) -s $(arg starttime)" output="screen"/>
+    <node pkg="rosbag" type="play" name="player" args="$(arg bagfile) -s $(arg starttime)" output="screen" required="$(arg closeatend)"/>
   </group>
 
   <!-- Visualizer -->
@@ -47,8 +48,8 @@
   </group>
 
   <group if="$(arg dosave)">
-      <node name="recorder_estimate" pkg="kiss_icp" type="pose_to_file" output="screen" required="true">
-          <param name="topic"      type="str" value="/odometry_node/odometry" />
+      <node name="recorder_estimate" pkg="kiss_icp" type="pose_to_file" output="screen">
+          <param name="topic"      type="str" value="/kiss/odometry" />
           <param name="topic_type" type="str" value="Odometry" />
           <param name="output"     type="str" value="$(arg path_est)" />
       </node>
