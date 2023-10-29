@@ -11,6 +11,7 @@ process_handheld_python() {
     python3 $script $bagfile --topic=/hesai/pandar --config=$kissicp_ws/src/kiss-icp/config/advanced_hesai32.yaml
 }
 
+# Running with ros is not preferred as the recorded poses miss many frames.
 process_ros1() {
     bagfile=$1
     topic=$2
@@ -55,12 +56,12 @@ $datadir/mycar_nav/20230814/lidar7_aligned.bag
 
 for bag in ${handheld_bags[@]}; do
     process_handheld_python $bag
-    dn=$(dirname $bag)
-    bagdn=$(basename $dn)
-    fn=$(basename $bag)
-    fnnoext="${fn%%.*}"
-    path_est=$result_dir/$bagdn/"$fnnoext"_scan_states.txt
-    process_ros1 $bag /hesai/pandar 50 $path_est
+    # dn=$(dirname $bag)
+    # bagdn=$(basename $dn)
+    # fn=$(basename $bag)
+    # fnnoext="${fn%%.*}"
+    # path_est=$result_dir/$bagdn/"$fnnoext"_scan_states.txt
+    # process_ros1 $bag /hesai/pandar 50 $path_est
 done
 
 for bag in ${rover_bags[@]}; do
