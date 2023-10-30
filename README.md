@@ -68,7 +68,7 @@ kiss_icp_pipeline --help
 <summary>ROS 2</summary>
 
 ```sh
-git clone https://github.com/PRBonn/kiss-icp && colcon build
+cd ~/ros2_ws/src/ && git clone https://github.com/PRBonn/kiss-icp && cd ~/ros2_ws/ && colcon build --packages-select kiss_icp
 ```
 </details>
 
