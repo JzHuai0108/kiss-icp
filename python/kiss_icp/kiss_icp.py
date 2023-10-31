@@ -74,8 +74,9 @@ class KissICP:
 
     def voxelize(self, iframe):
         frame_downsample = voxel_down_sample(iframe, self.config.mapping.voxel_size * 0.5)
-        source = voxel_down_sample(frame_downsample, self.config.mapping.voxel_size * 1.5)
-        return source, frame_downsample
+        # source = voxel_down_sample(frame_downsample, self.config.mapping.voxel_size * 1.5)
+        # return source, frame_downsample
+        return frame_downsample, frame_downsample
 
     def get_adaptive_threshold(self):
         return (
