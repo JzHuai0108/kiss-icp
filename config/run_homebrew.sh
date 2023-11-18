@@ -1,7 +1,7 @@
-datadir=/media/jhuai/SeagateData/jhuai/data/homebrew
+datadir=/media/jhuai/BackupPlus/jhuai/data/homebrew
 kissicp_ws=/home/jhuai/Documents/lidar/kissicp_ws
 script=$kissicp_ws/src/kiss-icp/python/kiss_icp/tools/cmd.py
-result_dir=/media/jhuai/SeagateData/jhuai/results/kissicp
+result_dir=/media/jhuai/BackupPlus/jhuai/results/kissicp/homebrew
 
 process_handheld_python() {
     bagfile=$1
@@ -31,8 +31,7 @@ process_rover_python() {
     python3 src/kiss-icp/python/kiss_icp/tools/cmd.py $bagfile --topic=/velodyne_points --config=$kissicp_ws/src/kiss-icp/config/advanced_vlp16.yaml
 }
 
-
-handheld_bags=(
+handheld_bags0=(
 $datadir/handheld/20230921/data2_aligned.bag
 $datadir/handheld/20230920/data2_aligned.bag
 $datadir/handheld/20230921/data3_aligned.bag
@@ -42,6 +41,26 @@ $datadir/handheld/20231007/data5_aligned.bag
 $datadir/handheld/20231019/data1_aligned.bag
 $datadir/handheld/20231019/data2_aligned.bag
 $datadir/handheld/20231025/data1_aligned.bag
+)
+
+handheld_bags=(
+$datadir/handheld/20231105/data1_aligned.bag
+$datadir/handheld/20231105/data2_aligned.bag
+$datadir/handheld/20231105/data3_aligned.bag
+$datadir/handheld/20231105/data4_aligned.bag
+$datadir/handheld/20231105/data5_aligned.bag
+$datadir/handheld/20231105/data6_aligned.bag
+$datadir/handheld/20231105/data7_aligned.bag
+$datadir/handheld/20231105_aft/data1_aligned.bag
+$datadir/handheld/20231105_aft/data2_aligned.bag
+$datadir/handheld/20231105_aft/data3_aligned.bag
+$datadir/handheld/20231105_aft/data4_aligned.bag
+$datadir/handheld/20231105_aft/data5_aligned.bag
+$datadir/handheld/20231105_aft/data6_aligned.bag
+$datadir/handheld/20231109/data1_aligned.bag
+$datadir/handheld/20231109/data2_aligned.bag
+$datadir/handheld/20231109/data3_aligned.bag
+$datadir/handheld/20231109/data4_aligned.bag
 )
 
 rover_bags=(
@@ -54,17 +73,12 @@ $datadir/mycar_nav/20230814/lidar6_aligned.bag
 $datadir/mycar_nav/20230814/lidar7_aligned.bag
 )
 
+counter=0
+mkdir -p $result_dir
 for bag in ${handheld_bags[@]}; do
     process_handheld_python $bag
-    # dn=$(dirname $bag)
-    # bagdn=$(basename $dn)
-    # fn=$(basename $bag)
-    # fnnoext="${fn%%.*}"
-    # path_est=$result_dir/$bagdn/"$fnnoext"_scan_states.txt
-    # process_ros1 $bag /hesai/pandar 50 $path_est
+    ((counter++))
+    # if [ $counter -gt 0 ]; then
+    #     break
+    # fi
 done
-
-for bag in ${rover_bags[@]}; do
-    process_rover_python $bag
-done
-
