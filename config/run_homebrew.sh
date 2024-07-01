@@ -1,7 +1,12 @@
 datadir=/media/jhuai/BackupPlus/jhuai/data/homebrew
+datadir=/media/jhuai/MyBookDuo/jhuai/data/homebrew/zongmu
+
 kissicp_ws=/home/jhuai/Documents/lidar/kissicp_ws
+
 script=$kissicp_ws/src/kiss-icp/python/kiss_icp/tools/cmd.py
 result_dir=/media/jhuai/BackupPlus/jhuai/results/kissicp/homebrew
+result_dir=/media/jhuai/SeagateData/jhuai/results/kissicp/
+result_dir=/media/jhuai/MyBookDuo/jhuai/results/kissicp/
 
 process_handheld_python() {
     bagfile=$1
@@ -32,8 +37,8 @@ process_rover_python() {
 }
 
 handheld_bags0=(
-$datadir/handheld/20230921/data2_aligned.bag
 $datadir/handheld/20230920/data2_aligned.bag
+$datadir/handheld/20230921/data2_aligned.bag
 $datadir/handheld/20230921/data3_aligned.bag
 $datadir/handheld/20230921/data4_aligned.bag
 $datadir/handheld/20230921/data5_aligned.bag
@@ -61,6 +66,26 @@ $datadir/handheld/20231109/data1_aligned.bag
 $datadir/handheld/20231109/data2_aligned.bag
 $datadir/handheld/20231109/data3_aligned.bag
 $datadir/handheld/20231109/data4_aligned.bag
+)
+
+handheld_bags=(
+$datadir/handheld-obsolete/20230920/data1_aligned.bag
+$datadir/ebike-obsolete/20231007/data1_aligned.bag
+$datadir/ebike-obsolete/20231007/data2_aligned.bag
+$datadir/ebike-obsolete/20231007/data3_aligned.bag
+$datadir/ebike-obsolete/20231007/data4_aligned.bag
+$datadir/ebike-obsolete/20231025/data2_aligned.bag
+)
+
+handheld_bags=($datadir/20240123/data1_aligned.bag
+$datadir/20240123/data2_aligned.bag
+$datadir/20240123/data3_aligned.bag
+$datadir/20240131/data1_aligned.bag
+$datadir/20240131/data2_aligned.bag
+$datadir/20240131/data3_aligned.bag
+$datadir/20240131/data4_aligned.bag
+$datadir/20240131/data5_aligned.bag
+$datadir/20240131/data6_aligned.bag
 )
 
 rover_bags=(
