@@ -1,7 +1,7 @@
-datadir=/media/jhuai/BackupPlus/jhuai/data/homebrew
-kissicp_ws=/home/jhuai/Documents/lidar/kissicp_ws
+datadir=/media/pi/BackupPlus/jhuai/data/homebrew/zongmu
+kissicp_ws=/home/pi/Documents/lidar/kissicp_ws
 script=$kissicp_ws/src/kiss-icp/python/kiss_icp/tools/cmd.py
-result_dir=/media/jhuai/BackupPlus/jhuai/results/kissicp/homebrew
+result_dir=/media/pi/BackupPlus/jhuai/results/kissicp/homebrew
 
 process_handheld_python() {
     bagfile=$1
@@ -71,6 +71,54 @@ $datadir/mycar_nav/20221021/lidar3_aligned.bag
 $datadir/mycar_nav/20221021/lidar4_aligned.bag
 $datadir/mycar_nav/20230814/lidar6_aligned.bag
 $datadir/mycar_nav/20230814/lidar7_aligned.bag
+)
+
+datadir=/media/pi/BackupPlus/jhuai/data/homebrew/zongmu
+handheld_bags=(
+    $datadir/20231201/data2_aligned.bag
+    $datadir/20231201/data3_aligned.bag
+    $datadir/20231208/data1_aligned.bag
+    $datadir/20231208/data2_aligned.bag
+    $datadir/20231208/data3_aligned.bag
+    $datadir/20231208/data4_aligned.bag
+    $datadir/20231208/data5_aligned.bag
+    $datadir/20231213/data1_aligned.bag
+    $datadir/20231213/data2_aligned.bag
+    $datadir/20231213/data3_aligned.bag
+    $datadir/20231213/data4_aligned.bag
+    $datadir/20231213/data5_aligned.bag
+)
+
+counter=0
+mkdir -p $result_dir
+for bag in ${handheld_bags[@]}; do
+    process_handheld_python $bag
+    ((counter++))
+    # if [ $counter -gt 0 ]; then
+    #     break
+    # fi
+done
+
+datadir="/media/pi/My_Book/jhuai/data/zongmu"
+handheld_bags=(
+    $datadir/20240113/data1_aligned.bag
+    $datadir/20240113/data2_aligned.bag
+    $datadir/20240113/data3_aligned.bag
+    $datadir/20240113/data4_aligned.bag
+    $datadir/20240113/data5_aligned.bag
+    $datadir/20240115/data1_aligned.bag
+    $datadir/20240115/data2_aligned.bag
+    $datadir/20240115/data3_aligned.bag
+    $datadir/20240115/data4_aligned.bag
+    $datadir/20240116/data2_aligned.bag
+    $datadir/20240116/data3_aligned.bag
+    $datadir/20240116/data4_aligned.bag
+    $datadir/20240116/data5_aligned.bag
+    $datadir/20240116_eve/data1_aligned.bag
+    $datadir/20240116_eve/data2_aligned.bag
+    $datadir/20240116_eve/data3_aligned.bag
+    $datadir/20240116_eve/data4_aligned.bag
+    $datadir/20240116_eve/data5_aligned.bag
 )
 
 counter=0
