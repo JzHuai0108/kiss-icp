@@ -1,0 +1,19 @@
+# NOTE: Please note that this is just an example of the advanced configuration for the KISS-ICP
+# pipeline and it's not really meant to use for any particular dataset, is just to expose other
+# options that are disabled by default
+out_dir: /media/jhuai/OldWin8OS/jhuai/rolling_shutter_calibration/results/livox_imu/k40pro_livox/xinghubldg/2024_10_30_16_29_09/front
+
+data:
+  deskew: True
+  preprocess: True
+  max_range: 40.0 # can be also changed in the CLI
+  min_range: 0.6
+
+mapping:
+  voxel_size: 0.5 # <- optional
+  max_points_per_voxel: 20
+
+adaptive_threshold:
+  fixed_threshold: 0.3 # <- optional, disables adaptive threshold
+  # initial_threshold: 2.0
+  # min_motion_th: 0.1
