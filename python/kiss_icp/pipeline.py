@@ -85,6 +85,7 @@ class OdometryPipeline:
         self._run_pipeline()
         self._run_evaluation()
         self._create_output_dir()
+        self._write_final_map()
         self._write_result_poses()
         self._write_gt_poses()
         self._write_cfg()
@@ -155,6 +156,35 @@ class OdometryPipeline:
             poses=self._calibrate_poses(self.poses),
             timestamps=self._get_frames_timestamps(),
         )
+
+    def _write_final_map(self):
+        fn = f"{self.results_dir}/{self.dataset_sequence}.pcd"
+        pc = self.odometry.local_map.point_cloud()
+        # save the np array of Nx3 points as a pcd file
+        # Check the point cloud is valid
+        if pc is None or pc.shape[1] != 3:
+            raise ValueError("Point cloud must be an Nx3 numpy array")
+
+        # Write to PCD file
+        with open(fn, 'w') as f:
+            # Write PCD header
+            f.write("# .PCD v0.7 - Point Cloud Data file format\n")
+            f.write(f"VERSION 0.7\n")
+            f.write(f"FIELDS x y z\n")
+            f.write(f"SIZE 4 4 4\n")
+            f.write(f"TYPE F F F\n")
+            f.write(f"COUNT 1 1 1\n")
+            f.write(f"WIDTH {pc.shape[0]}\n")
+            f.write(f"HEIGHT 1\n")
+            f.write(f"VIEWPOINT 0 0 0 1 0 0 0\n")
+            f.write(f"POINTS {pc.shape[0]}\n")
+            f.write(f"DATA ascii\n")
+            
+            # Write point data
+            for point in pc:
+                f.write(f"{point[0]} {point[1]} {point[2]}\n")
+
+        print(f"Point cloud saved to: {fn}")
 
     def _write_gt_poses(self):
         if not self.has_gt:
