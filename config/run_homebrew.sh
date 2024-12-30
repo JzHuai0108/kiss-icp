@@ -1,13 +1,3 @@
-datadir=/media/jhuai/BackupPlus/jhuai/data/homebrew
-datadir=/media/jhuai/MyBookDuo/jhuai/data/homebrew/zongmu
-
-kissicp_ws=/home/jhuai/Documents/lidar/kissicp_ws
-
-script=$kissicp_ws/src/kiss-icp/python/kiss_icp/tools/cmd.py
-result_dir=/media/jhuai/BackupPlus/jhuai/results/kissicp/homebrew
-result_dir=/media/jhuai/SeagateData/jhuai/results/kissicp/
-result_dir=/media/jhuai/MyBookDuo/jhuai/results/kissicp/
-
 process_handheld_python() {
     bagfile=$1
     echo "Processing $bagfile"
@@ -114,16 +104,6 @@ handheld_bags=(
     $datadir/20231213/data5_aligned.bag
 )
 
-counter=0
-mkdir -p $result_dir
-for bag in ${handheld_bags[@]}; do
-    process_handheld_python $bag
-    ((counter++))
-    # if [ $counter -gt 0 ]; then
-    #     break
-    # fi
-done
-
 datadir="/media/pi/My_Book/jhuai/data/zongmu"
 handheld_bags=(
     $datadir/20240113/data1_aligned.bag
@@ -145,6 +125,19 @@ handheld_bags=(
     $datadir/20240116_eve/data4_aligned.bag
     $datadir/20240116_eve/data5_aligned.bag
 )
+
+datadir=/media/$USER/MyBookDuo/jhuai/data/homebrew/zongmu
+datadir=/media/$USER/BackupPlus/jhuai/data/homebrew
+
+kissicp_ws=/home/$USER/Documents/lidar/kissicp_ws
+
+script=$kissicp_ws/src/kiss-icp/python/kiss_icp/tools/cmd.py
+
+result_dir=/media/$USER/SeagateData/jhuai/results/kissicp/
+result_dir=/media/$USER/MyBookDuo/jhuai/results/kissicp/
+result_dir=/media/$USER/BackupPlus/jhuai/results/kissicp
+
+handheld_bags=($datadir/ebike/20231105_aft/data6_aligned.bag)
 
 counter=0
 mkdir -p $result_dir

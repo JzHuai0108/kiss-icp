@@ -67,6 +67,7 @@ class RosbagDataset:
 
         # Visualization Options
         self.use_global_visualizer = True
+        self.prev_msg_time = 0
 
     def __del__(self):
         if hasattr(self, "bag"):
@@ -80,6 +81,11 @@ class RosbagDataset:
         # self.timestamps.append(self.to_sec(timestamp))
         msg = self.bag.deserialize(rawdata, connection.msgtype)
         msgtime = msg.header.stamp.sec + msg.header.stamp.nanosec * 1e-9
+        # jhuai: I don't see much benefit of the below check.
+        # if msgtime < self.prev_msg_time:
+        #     print(f'Warn: Dropping early msg at {msg.header.stamp.sec}.{msg.header.stamp.nanosec:09d}')
+        #     return self.__getitem__(idx)
+        self.prev_msg_time = msgtime
         self.timestamps.append(msgtime)
         return self.read_point_cloud(msg)
 
