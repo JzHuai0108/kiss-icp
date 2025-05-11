@@ -145,10 +145,32 @@ class OdometryPipeline:
             else np.arange(0, len(self.poses), 1.0)
         )
 
+    @staticmethod
+    def compute_mid_pose_times(timestamps):
+        """
+        Given a 1D array or list of monotonic timestamps, compute:
+        - median_interval: the median of the consecutive differences
+        - mid_pose_times : each timestamp shifted by half that median
+
+        Returns:
+        median_interval : float
+        mid_pose_times  : np.ndarray of same shape as input
+        """
+        # Turn into a flat numpy array of floats
+        ts = np.asarray(timestamps, dtype=float).ravel()
+        if ts.size < 2:
+            raise ValueError("Need at least two timestamps to compute intervals")
+        diffs = np.diff(ts)                     # shape (N-1,)
+        median_interval = float(np.median(diffs))
+        mid_pose_times = ts + median_interval / 2
+        return median_interval, mid_pose_times
+
     def _save_poses(self, filename: str, poses, timestamps):
         np.save(filename, poses)
         self.save_poses_kitti_format(filename, poses)
-        self.save_poses_tum_format(filename, poses, timestamps)
+        dt_med, mid_pose_times = self.compute_mid_pose_times(timestamps)
+        print("Median interval:", dt_med)
+        self.save_poses_tum_format(filename, poses, mid_pose_times)
 
     def _write_result_poses(self):
         self._save_poses(
