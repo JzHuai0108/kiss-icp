@@ -21,6 +21,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 import numpy as np
+from scipy.spatial.transform import Rotation as R
+import math
 
 from kiss_icp.config import KISSConfig
 from kiss_icp.deskew import get_motion_compensator
@@ -39,8 +41,9 @@ class KissICP:
         self.adaptive_threshold = get_threshold_estimator(self.config)
         self.local_map = get_voxel_hash_map(self.config)
         self.preprocess = get_preprocessor(self.config)
+        self.rot_apply_times = 0
 
-    def register_frame(self, frame, timestamps):
+    def register_frame(self, frame, timestamps, imu_msgs=None):
         # Apply motion compensation
         frame = self.compensator.deskew_scan(frame, self.poses, timestamps)
 
@@ -55,6 +58,20 @@ class KissICP:
 
         # Compute initial_guess for ICP
         prediction = self.get_prediction_model()
+
+        use_prior_motion = False
+        # Check for significant rotation using IMU angular velocity around Z (aligned with -LiDAR X)
+        if use_prior_motion and imu_msgs and imu_msgs[0].angular_velocity.z > math.pi * 0.7 and self.rot_apply_times < 10:
+            print('Rotating frame detected, applying rotation, len(imu_msgs):', len(imu_msgs), 
+                  ' imu_msgs[0].angular_velocity:', imu_msgs[0].angular_velocity)
+            # The LiDAR frame rotates around the X-axis (negative direction) at ω = -π rad/s over 0.1 seconds
+            angle = -math.pi * 0.1
+            axis = np.array([1, 0, 0])  # X-axis
+            rotation_matrix = R.from_rotvec(angle * axis).as_matrix()
+            prediction[:3, :3] = rotation_matrix
+            # prediction[:3, 3] = np.array([0, 0, 0])
+            self.rot_apply_times += 1
+
         last_pose = self.poses[-1] if self.poses else np.eye(4)
         initial_guess = last_pose @ prediction
 

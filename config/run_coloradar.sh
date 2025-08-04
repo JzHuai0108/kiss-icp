@@ -1,6 +1,6 @@
 datadir=/media/jhuai/BackupPlus/jhuai/data/coloradar/rosbags
 kissicp_ws=/home/jhuai/Documents/lidar/kissicp_ws
-script=$kissicp_ws/src/kiss-icp/python/kiss_icp/tools/cmd.py
+script=$kissicp_ws/src/kiss-icp/python/kiss_icp/tools/kisscli.py
 result_dir=/media/jhuai/BackupPlus/jhuai/results/kissicp/coloradar
 
 process_handheld_python() {

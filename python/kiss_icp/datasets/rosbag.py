@@ -29,7 +29,7 @@ import natsort
 
 
 class RosbagDataset:
-    def __init__(self, data_dir: Sequence[Path], topic: str, *_, **__):
+    def __init__(self, data_dir: Sequence[Path], topic: str, imu_topic: str="/imu/data", *_, **__):
         """ROS1 / ROS2 bagfile dataloader.
 
         It can take either one ROS2 bag file or one or more ROS1 bag files belonging to a split bag.
@@ -64,6 +64,16 @@ class RosbagDataset:
         connections = [x for x in self.bag.connections if x.topic == self.topic]
         self.msgs = self.bag.messages(connections=connections)
         self.timestamps = []
+        imu_msgs_generator = self.bag.messages(
+                connections=[x for x in self.bag.connections if x.topic == imu_topic])
+        self.imu_msgs = []
+        for connection, timestamp, rawdata in imu_msgs_generator:
+            msg = self.bag.deserialize(rawdata, connection.msgtype)
+            msgtime = msg.header.stamp.sec + msg.header.stamp.nanosec * 1e-9
+            self.imu_msgs.append((msg, msgtime))
+        print(f'Loaded {len(self.imu_msgs)} IMU messages from topic {imu_topic}')
+        print(' imu times 0 ->', self.imu_msgs[0][1] if len(self.imu_msgs) > 0 else 'None')
+        print(' imu times -1 ->', self.imu_msgs[-1][1] if len(self.imu_msgs) > 0 else 'None')
 
         # Visualization Options
         self.use_global_visualizer = True
@@ -88,6 +98,14 @@ class RosbagDataset:
         self.prev_msg_time = msgtime
         self.timestamps.append(msgtime)
         return self.read_point_cloud(msg)
+
+    def get_imu_msgs(self, time):
+        """Return IMU messages within 0.05 seconds of the specified time."""
+        imu_msgs = []
+        for msg, stamp in self.imu_msgs:
+            if time <= stamp < time + 0.1:
+                imu_msgs.append(msg)
+        return imu_msgs
 
     @staticmethod
     def to_sec(nsec: int):

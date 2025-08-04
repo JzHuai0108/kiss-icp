@@ -96,8 +96,12 @@ class OdometryPipeline:
     def _run_pipeline(self):
         for idx in get_progress_bar(self._first, self._last):
             raw_frame, timestamps = self._next(idx)
+            imu_msgs = None
+            if hasattr(self._dataset, "get_imu_msgs"):
+                stamp = self._dataset.get_frames_timestamps()[-1]
+                imu_msgs = self._dataset.get_imu_msgs(stamp)
             start_time = time.perf_counter_ns()
-            source, keypoints = self.odometry.register_frame(raw_frame, timestamps)
+            source, keypoints = self.odometry.register_frame(raw_frame, timestamps, imu_msgs)
             self.times.append(time.perf_counter_ns() - start_time)
             self.visualizer.update(source, keypoints, self.odometry.local_map, self.poses[-1])
 

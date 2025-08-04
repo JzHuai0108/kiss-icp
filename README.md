@@ -55,7 +55,13 @@ For advanced instructions on the Python pacakge plase see [this README](python/R
 
 I recommend using a conda virtual env based on miniconda, say kissicp.
 ```
+conda create -n kissicp python=3.9.18
 conda activate kissicp
+pip uninstall cmake
+pip install cmake==3.27.7
+pip install PyYAML
+pip install open3d
+
 cd src/kiss-icp
 make editable
 kiss_icp_pipeline --help
