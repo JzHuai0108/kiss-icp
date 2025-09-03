@@ -2,7 +2,7 @@
 # Note this script requires a conda env kissicp
 kissicp_ws=/home/jhuai/Documents/lidar/kissicp_ws
 
-script=$kissicp_ws/src/kiss-icp/python/kiss_icp/tools/cmd.py
+script=$kissicp_ws/src/kiss-icp/python/kiss_icp/tools/kisscli.py
 result_dir=/home/jhuai/Desktop/temp
 
 process_handheld_python() {

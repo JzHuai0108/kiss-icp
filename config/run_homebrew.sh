@@ -23,7 +23,7 @@ process_rover_python() {
     echo "Processing $bagfile"
     cd $kissicp_ws
     sed -i "/out_dir:/c\out_dir: $result_dir" $kissicp_ws/src/kiss-icp/config/advanced_vlp16.yaml
-    python3 src/kiss-icp/python/kiss_icp/tools/cmd.py $bagfile --topic=/velodyne_points --config=$kissicp_ws/src/kiss-icp/config/advanced_vlp16.yaml
+    python3 src/kiss-icp/python/kiss_icp/tools/kisscli.py $bagfile --topic=/velodyne_points --config=$kissicp_ws/src/kiss-icp/config/advanced_vlp16.yaml
 }
 
 handheld_bags0=(
@@ -131,7 +131,7 @@ datadir=/media/$USER/BackupPlus/jhuai/data/homebrew
 
 kissicp_ws=/home/$USER/Documents/lidar/kissicp_ws
 
-script=$kissicp_ws/src/kiss-icp/python/kiss_icp/tools/cmd.py
+script=$kissicp_ws/src/kiss-icp/python/kiss_icp/tools/kisscli.py
 
 result_dir=/media/$USER/SeagateData/jhuai/results/kissicp/
 result_dir=/media/$USER/MyBookDuo/jhuai/results/kissicp/

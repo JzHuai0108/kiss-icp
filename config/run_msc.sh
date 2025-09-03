@@ -1,6 +1,6 @@
 datadir=/media/jhuai/BackupPlus/jhuai/data/mscrad4r
 kissicp_ws=/home/jhuai/Documents/lidar/kissicp_ws
-script=$kissicp_ws/src/kiss-icp/python/kiss_icp/tools/cmd.py
+script=$kissicp_ws/src/kiss-icp/python/kiss_icp/tools/kisscli.py
 result_dir=/media/jhuai/BackupPlus/jhuai/results/kissicp/msc
 
 process_rover_python() {
@@ -8,7 +8,7 @@ process_rover_python() {
     echo "Processing $bagfile"
     cd $kissicp_ws
     sed -i "/out_dir:/c\out_dir: $result_dir" $kissicp_ws/src/kiss-icp/config/msc_os1_128.yaml
-    python3 src/kiss-icp/python/kiss_icp/tools/cmd.py $bagfile --topic=/ouster/points --config=$kissicp_ws/src/kiss-icp/config/msc_os1_128.yaml
+    python3 src/kiss-icp/python/kiss_icp/tools/kisscli.py $bagfile --topic=/ouster/points --config=$kissicp_ws/src/kiss-icp/config/msc_os1_128.yaml
 }
 
 rover_bags=(
