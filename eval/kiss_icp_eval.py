@@ -19,8 +19,12 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+import os
 from dataclasses import dataclass
 from typing import Callable, Dict, List
+
+import matplotlib
+matplotlib.use("Agg")  # must be before importing pyplot
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -80,20 +84,20 @@ def plot_trajectories(results: Dict, close_all: bool = True) -> None:
         plt.close("all")
     for sequence, trajectory in results["trajectories"].items():
         poses = PosePath3D(poses_se3=trajectory["poses"])
-        gt_poses = PosePath3D(poses_se3=trajectory["gt_poses"])
-
         plot_mode = plot.PlotMode.xyz
         fig = plt.figure(f"Trajectory results for {results['dataset_name']} {sequence}")
         ax = plot.prepare_axis(fig, plot_mode)
-        plot.traj(
-            ax=ax,
-            plot_mode=plot_mode,
-            traj=gt_poses,
-            label="ground truth",
-            style=SETTINGS.plot_reference_linestyle,
-            color=SETTINGS.plot_reference_color,
-            alpha=SETTINGS.plot_reference_alpha,
-        )
+        if trajectory["gt_poses"]:
+            gt_poses = PosePath3D(poses_se3=trajectory["gt_poses"])
+            plot.traj(
+                ax=ax,
+                plot_mode=plot_mode,
+                traj=gt_poses,
+                label="ground truth",
+                style=SETTINGS.plot_reference_linestyle,
+                color=SETTINGS.plot_reference_color,
+                alpha=SETTINGS.plot_reference_alpha,
+            )
         plot.traj(
             ax=ax,
             plot_mode=plot_mode,
@@ -106,4 +110,10 @@ def plot_trajectories(results: Dict, close_all: bool = True) -> None:
 
         ax.legend(frameon=True)
         ax.set_title(f"Sequence {sequence}")
-        plt.show()
+        # plt.show()
+        out_dir = results.get("out_dir", ".")
+        outfile = os.path.join(out_dir, f"traj_{results['dataset_name']}_{sequence}.png")
+        plt.savefig(outfile, dpi=150, bbox_inches="tight")
+        plt.close(fig)
+        print(f"Saved trajectory plot to: {outfile}")
+
