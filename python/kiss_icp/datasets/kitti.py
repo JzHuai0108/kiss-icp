@@ -56,11 +56,12 @@ class KITTIOdometryDataset:
     def scans(self, idx):
         return self.read_point_cloud(self.scan_files[idx])
 
-    def apply_calibration(self, poses: np.ndarray) -> np.ndarray:
-        """Converts from Velodyne to Camera Frame"""
-        Tr = np.eye(4, dtype=np.float64)
-        Tr[:3, :4] = self.calibration["Tr"].reshape(3, 4)
-        return Tr @ poses @ np.linalg.inv(Tr)
+    # note we disable applying the cam_T_lidar to save the poses in the velodyne frame.
+    # def apply_calibration(self, poses: np.ndarray) -> np.ndarray:
+    #     """Converts from Velodyne to Camera Frame"""
+    #     Tr = np.eye(4, dtype=np.float64)
+    #     Tr[:3, :4] = self.calibration["Tr"].reshape(3, 4)
+    #     return Tr @ poses @ np.linalg.inv(Tr)
 
     def read_point_cloud(self, scan_file: str):
         points = np.fromfile(scan_file, dtype=np.float32).reshape((-1, 4))[:, :3].astype(np.float64)

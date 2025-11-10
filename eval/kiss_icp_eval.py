@@ -87,8 +87,9 @@ def plot_trajectories(results: Dict, close_all: bool = True) -> None:
         plot_mode = plot.PlotMode.xyz
         fig = plt.figure(f"Trajectory results for {results['dataset_name']} {sequence}")
         ax = plot.prepare_axis(fig, plot_mode)
-        if trajectory["gt_poses"]:
-            gt_poses = PosePath3D(poses_se3=trajectory["gt_poses"])
+        ref_poses = trajectory.get("gt_poses")
+        if ref_poses is not None and ref_poses.size > 0:
+            gt_poses = PosePath3D(poses_se3=ref_poses)
             plot.traj(
                 ax=ax,
                 plot_mode=plot_mode,
